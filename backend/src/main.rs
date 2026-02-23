@@ -5,11 +5,13 @@ mod app;
 mod models;
 mod routes;
 mod middleware;
+mod utils;
 
 use state::AppState;
 use std::sync::Arc;
 use crate::{config::Config, db::pg_connect::Connect};
 use std::net::SocketAddr;
+
 #[tokio::main]
 async fn main() {
     let config =Config::from_env();
