@@ -10,6 +10,3 @@ pub fn create_app(state:AppState)->Router {
         .route("/api", get(|| async {"ok"}))
         .with_state(state)
 }
-async fn health_check() -> &'static str {
-    "OK - Meeting App is running"
-}

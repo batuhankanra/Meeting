@@ -2,6 +2,7 @@ mod db;
 mod state;
 mod config;
 mod app;
+mod models;
 
 use state::AppState;
 use std::sync::Arc;
