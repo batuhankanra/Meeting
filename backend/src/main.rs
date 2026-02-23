@@ -1,41 +1,31 @@
 mod db;
 mod state;
+mod config;
+mod app;
 
-use axum::{routing::get, Router};
-use dotenvy::dotenv;
-use std::env;
 use state::AppState;
 use std::sync::Arc;
-use crate::db::pg_connect::{ create_pool};
+use crate::{config::Config, db::pg_connect::Connect};
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
+    let config =Config::from_env();
 
-    let database_url =
-        env::var("DATABASE_URL").expect("DATABASE_URL env değişkeni yok");
+    let pool=Connect::create_pool(&config.database_url).await;
 
-    let pool = create_pool(&database_url).await;
-
-    // Test query (çok önemli)
-    sqlx::query("SELECT 1")
-        .execute(&pool)
-        .await
-        .expect("❌ DB test query failed");
-
+    Connect::ping(&pool).await;
     println!("✅ PostgreSQL bağlantısı OK");
 
     let state = AppState {
         db: Arc::new(pool),
     };
 
-    let app = Router::new()
-        .route("/health", get(|| async { "ok" }))
-        .with_state(state);
+    let app = app::create_app(state);
+    let addr=format!("0.0.0.0:{}",config.server_port);
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
+    let listener = tokio::net::TcpListener::bind(&addr)
         .await
         .unwrap();
 
-    println!("🚀 Server running on http://localhost:3000");
+    println!("🚀 Server running on http://localhost:{}",config.server_port);
     axum::serve(listener, app).await.unwrap();
 }
