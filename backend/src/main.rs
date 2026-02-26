@@ -6,6 +6,8 @@ mod models;
 mod routes;
 mod middleware;
 mod utils;
+mod handlers;
+mod dto;
 
 use state::AppState;
 use std::sync::Arc;

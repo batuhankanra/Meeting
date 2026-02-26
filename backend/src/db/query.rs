@@ -7,14 +7,13 @@ pub struct UserRepository;
 
 
 impl UserRepository {
-    pub async fn create(pool:&PgPool,data:User)->Result<User> {
+    pub async fn create(pool:&PgPool,email:&str,password:&str)->Result<User> {
         sqlx::query_as::<_,User>(
-            "INSERT INTO users (username,email,password_hash)
-            VALUES ($1,$2,$3) RETURNING *"
+            "INSERT INTO users (email,password_hash)
+            VALUES ($1,$2) RETURNING *"
         )
-        .bind(data.username)
-        .bind(data.email)
-        .bind(data.password_hash)
+        .bind(email)
+        .bind(password)
         .fetch_one(pool)
         .await
     }

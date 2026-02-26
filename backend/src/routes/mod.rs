@@ -1,14 +1,14 @@
+pub mod auth;
 
 
+use axum::{Router};
 
-use axum::{Router, routing::get};
-
-use crate::state::AppState;
+use crate::{routes::auth::auth, state::AppState};
 
 
 
 pub fn main_routes()->Router<AppState>{
     Router::new()
-        .route("/register", get(|| async {"ok"}))
+        .nest("/auth",auth() )
         
 }

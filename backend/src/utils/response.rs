@@ -1,24 +1,42 @@
+use axum::{
+    http::StatusCode,
+    response::IntoResponse,
+    Json,
+};
 use serde::Serialize;
-use axum::{Json,http::StatusCode};
 
 #[derive(Serialize)]
-pub struct ApiRespnse<T>{
-    pub success:bool,
-    pub message:String,
-    pub data:Option<T>
+pub struct ApiRespnse<T> {
+    pub success: bool,
+    pub message: String,
+    pub data: Option<T>,
+    #[serde(skip)]
+    pub status: StatusCode,
 }
 
-impl <T> ApiRespnse<T> where T:Serialize {
-    pub fn success(data:T,message:&str)->(StatusCode,Json<Self>){
-        (
-            StatusCode::OK,
-            Json(ApiRespnse { success: true, message: message.to_string(), data: Some(data) })
-        )
+impl<T: Serialize> IntoResponse for ApiRespnse<T> {
+    fn into_response(self) -> axum::response::Response {
+        let status = self.status;
+        (status, Json(self)).into_response()
     }
-    pub fn created(data:T,message:&str)->(StatusCode,Json<Self>){
-        (
-            StatusCode::CREATED,
-            Json(ApiRespnse { success: true, message: message.to_string(), data: Some(data) })
-        )
+}
+
+impl<T: Serialize> ApiRespnse<T> {
+    pub fn success(data: T, message: &str) -> Self {
+        Self {
+            success: true,
+            message: message.to_string(),
+            data: Some(data),
+            status: StatusCode::OK,
+        }
+    }
+
+    pub fn created(data: T, message: &str) -> Self {
+        Self {
+            success: true,
+            message: message.to_string(),
+            data: Some(data),
+            status: StatusCode::CREATED,
+        }
     }
 }
