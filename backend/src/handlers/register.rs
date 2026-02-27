@@ -23,15 +23,13 @@ pub async fn register_handler(
             msg
         })
         .collect();
-
-    // İlk hatayı dönmek genelde UX açısından daha temizdir:
     AppError::BadRequest(error_messages.first().cloned().unwrap_or_default())
 })?;
 
     let hashed_password = hash(payload.password, DEFAULT_COST)
         .map_err(|_| AppError::Internal("Password hash error".to_string()))?;
 
-    let mut user = UserRepository::create(
+    UserRepository::create(
         &state.db,
         &payload.email,
         &hashed_password,
@@ -44,7 +42,6 @@ pub async fn register_handler(
             AppError::Internal(e.to_string())
         }
     })?;
-    user.password_hash="".to_string();
 
-    Ok(ApiRespnse::created(user, "Kayıt başarıyla oluşturuldu"))
+    Ok(ApiRespnse::created( "Kayıt başarıyla oluşturuldu"))
 }

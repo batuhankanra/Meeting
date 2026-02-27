@@ -31,11 +31,11 @@ impl<T: Serialize> ApiRespnse<T> {
         }
     }
 
-    pub fn created(data: T, message: &str) -> Self {
+    pub fn created( message: &str) -> Self {
         Self {
             success: true,
             message: message.to_string(),
-            data: Some(data),
+            data: None,
             status: StatusCode::CREATED,
         }
     }

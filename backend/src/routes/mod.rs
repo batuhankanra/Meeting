@@ -1,14 +1,15 @@
 pub mod auth;
 
 
-use axum::{Router};
+use axum::{Router, routing::get};
 
-use crate::{routes::auth::auth, state::AppState};
+use crate::{handlers::all_services::all_services, routes::auth::auth, state::AppState};
 
 
 
 pub fn main_routes()->Router<AppState>{
     Router::new()
         .nest("/auth",auth() )
+        .route("/all", get(all_services))
         
 }

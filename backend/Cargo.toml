@@ -12,7 +12,7 @@ serde_json = "1.0.145"
 sqlx = { version = "0.8.6",features = ["runtime-tokio","postgres","uuid","chrono","macros"]}
 jsonwebtoken = "10.3.0"
 uuid = { version = "1.18.0", features = ["v4", "serde"] }
-chrono = { version = "0.4.42", features = ["serde"] }
+chrono = { version = "0.4.44", features = ["serde"] }
 dotenvy = "0.15.7"
 validator = { version = "0.20.0", features = ["derive"] }
 bcrypt = "0.18.0"
