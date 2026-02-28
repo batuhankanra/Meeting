@@ -2,13 +2,13 @@ use axum::{Json, extract::{State, rejection::JsonRejection}, };
 use bcrypt::{DEFAULT_COST, hash};
 use validator::Validate;
 
-use crate::{db::query::UserRepository, dto::auth::RegisterRequest, models::user::User, state::AppState, utils::{error::AppError, response::ApiRespnse}};
+use crate::{db::query::UserRepository, dto::auth::AuthRequest, models::user::User, state::AppState, utils::{error::AppError, response::ApiRespnse}};
 
 
 
 pub async fn register_handler(
     State(state): State<AppState>,
-    payload: Result<Json<RegisterRequest>, JsonRejection>,
+    payload: Result<Json<AuthRequest>, JsonRejection>,
 ) -> Result<ApiRespnse<User>, AppError> {
     let Json(payload)=payload?;
     payload.validate().map_err(|e| {

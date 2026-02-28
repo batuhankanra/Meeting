@@ -34,6 +34,6 @@ async fn main() {
         .await
         .unwrap();
 
-    println!("🚀 Server running on http://localhost:{}",config.server_port);
+       println!("\x1b[1;37;44m 🚀 SERVER RUNNING \x1b[0m \x1b[34m http://localhost:{}\x1b[0m",config.server_port );
     axum::serve(listener, app.into_make_service_with_connect_info::<SocketAddr>()).await.unwrap();
 }
