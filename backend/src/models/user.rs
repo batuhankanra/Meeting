@@ -4,7 +4,7 @@ use uuid::Uuid;
 use chrono::{DateTime, Utc};
 
 
-#[derive(Debug,serde::Serialize,serde::Deserialize,sqlx::Type)]
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, Copy, PartialEq)]
 #[sqlx(type_name="user_role",rename_all="lowercase")]
 pub enum UserRole{
     Admin,
